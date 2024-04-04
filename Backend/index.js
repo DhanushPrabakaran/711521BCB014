@@ -3,6 +3,23 @@ const fetch = require("node-fetch"); // For making HTTP requests
 const mongoose = require("mongoose");
 const app = express();
 const com = ["AMZ", "FLP", "SNP", "MYN", "AZO"];
+const generateToken= async()=>{
+  const token=await fetch(`http://20.244.56.144/test/auth`,{
+    method:'post',
+    body:{
+      "companyName" : "goMart",
+      "clientID": "29d15ed4-d662-43d0-a144-0747225e08a3",
+      "clientSecret": "oLDaQouYXFmIikYx",
+      "ownerName": "Dhanush P",
+      "ownerEmail": "kit.25.21bcb014@gmail.com",
+      "rollNo": "711521BCB014"
+  }
+  })
+  .then(res => res.json())
+  .catch((error) => {console.log('Error:', error)});
+   return token.access_token;
+}
+
 const Categories = [
   "Phone",
   "Computer",
@@ -59,12 +76,13 @@ app.get("/categories/:categoryName/products", async (req, res) => {
   const url = `http://20.244.56.144/test/com/${comnam}/categories/${categoryName}/products?top=${
     n || 10
   }`;
+  const token = await generateToken
   try {
     const response = await fetch(url, {
       method: "GET",
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzEyMjA4MjQxLCJpYXQiOjE3MTIyMDc5NDEsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjI5ZDE1ZWQ0LWQ2NjItNDNkMC1hMTQ0LTA3NDcyMjVlMDhhMyIsInN1YiI6ImtpdC4yNS4yMWJjYjAxNEBnbWFpbC5jb20ifSwiY29tcGFueU5hbWUiOiJnb01hcnQiLCJjbGllbnRJRCI6IjI5ZDE1ZWQ0LWQ2NjItNDNkMC1hMTQ0LTA3NDcyMjVlMDhhMyIsImNsaWVudFNlY3JldCI6Im9MRGFRb3VZWEZtSWlrWXgiLCJvd25lck5hbWUiOiJEaGFudXNoIFAiLCJvd25lckVtYWlsIjoia2l0LjI1LjIxYmNiMDE0QGdtYWlsLmNvbSIsInJvbGxObyI6IjcxMTUyMUJDQjAxNCJ9.yvgLY9_-X9ncaHPj4axzyexnLbHs7-QHUtr1j0Mvr4Q",
+          `Bearer &{}`,
       },
     });
     const products = await response.json();
