@@ -82,7 +82,7 @@ app.get("/categories/:categoryName/products", async (req, res) => {
       method: "GET",
       headers: {
         Authorization:
-          `Bearer &{generateToken}`,
+          `Bearer ${generateToken}`,
       },
     });
     const products = await response.json();
